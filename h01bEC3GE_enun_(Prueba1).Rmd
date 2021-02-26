@@ -121,6 +121,7 @@ gapminder %>%
 
 country_codes %>%
   filter(country %in% America) %>%
+  mutate(paiscodigo = paste0(country," (", iso_alpha, ")")) %>%
   rename("Nombre del país" = country, "Código alpha" = iso_alpha, "Código num" = iso_num) %>%
   kbl(caption = "Países de América") %>%
   kable_classic(full_width = F)
