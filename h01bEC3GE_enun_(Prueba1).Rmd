@@ -43,6 +43,9 @@ En los siguientes ejercicios se debe utilizar el sistema "tidyverse" junto a los
 # Punto 1
 
 ```{r}
+names(gapminder)
+names(country_codes)
+
 # 1
 head(gapminder)
 head(country_codes)
@@ -53,6 +56,9 @@ head(country_codes)
 # 3
 str(head(gapminder))
 str(head(country_codes))
+
+glimpse(gapminder) #Con tidyverse
+glimpse(country_codes) #Con tidyverse
 ```
 
 # Punto 2
