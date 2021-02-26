@@ -101,6 +101,14 @@ gapminder[gapminder$year == gapminder$year[(nrow(gapminder) - 4):nrow(gapminder)
   rename("Continente" = continent, "Año" = year) %>%
   kbl(caption = "Población total por continentes para los últimos 5 años disponibles") %>%
   kable_classic(full_width = F)
+
+#otra forma de sacar los años con tidyverse
+gapminder %>%
+  select(year) %>%
+  distinct(year) %>%
+  arrange(desc(year)) %>%
+  slice(1:5) %>%
+  pull() ->lastsyears
 ```
 
 # Punto 5
@@ -116,6 +124,7 @@ country_codes %>%
   rename("Nombre del país" = country, "Código alpha" = iso_alpha, "Código num" = iso_num) %>%
   kbl(caption = "Países de América") %>%
   kable_classic(full_width = F)
+#tambien se puede usar left_join() o inner_join()
 ```
 
 # Punto 6
