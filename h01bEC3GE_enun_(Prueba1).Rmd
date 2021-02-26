@@ -1,0 +1,129 @@
+---
+title: "Hoja 1b de problemas y prácticas con R"
+author: "Departamento de Estadística e Investigación Operativa. Universidad de Sevilla"
+subtitle: Estadística Computacional I. Grado en Estadística
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gapminder)
+library(dplyr)
+library(kableExtra)
+library(ggplot2)
+data(gapminder)
+data(country_codes)
+```
+
+En los siguientes ejercicios se debe utilizar el sistema "tidyverse" junto a los siguientes datasets de la librería "gapminder":
+
+- "gapminder"
+- "country_codes"
+
+1. Muestre los nombres de las variables que tienen los dos datasets referidos. 
+
+    1. Muestre a continuación las primeras filas de dichos datasets.
+    2. Busque en la ayuda del paquete "gapminder" el diccionario o definición de las variables que componen dichos datasets.
+    3. Muestre las primeras filas junto al tipo de objeto de cada una de las variables.
+
+2. Obtenga la esperanza de vida de los siguientes países: "Kenya", "Peru", "Syria" en el 2007, en una sola consulta con el sistema tidyverse, mostrándolos por orden decreciente de la esperanza de vida.
+
+3. ¿Cuántos países distintos aparecen en el dataset "gapminder"? ¿Cuántos países aparecen en Europa? Liste los nombres de estos últimos ordenados alfabéticamente.
+
+4. Calcule la población total por continentes para los últimos 5 años disponibles.
+
+5. Obtenga los códigos (`iso_alpha` e `iso_num`) asociados a cada uno los países de América que aparecen en 2002, construyendo un nuevo dataset que tenga: "nombre del país", "código alpha", "código num", y "nombre (código alpha)". Presente los datos con ayuda del paquete "kableExtra".
+
+6. Represente gráficamente la evolución de la esperanza de vida de los países de Oceanía con ayuda del paquete ggplot2.
+
+
+
+# Punto 1
+
+```{r}
+# 1
+head(gapminder)
+head(country_codes)
+
+# 2
+?gapminder
+
+# 3
+str(head(gapminder))
+str(head(country_codes))
+```
+
+# Punto 2
+
+```{r}
+gapminder %>%
+  select(country, lifeExp, year) %>%
+  filter(country %in% c("Kenya", "Peru", "Syria"), year == 2007) %>%
+  arrange(desc(lifeExp))
+```
+# Punto 3
+
+```{r}
+# 1
+gapminder %>% summarise(n_distinct(country))
+
+# 2
+gapminder %>%
+  filter(continent == "Europe") %>%
+  summarise(n_distinct(country))
+
+# 3
+gapminder %>%
+  filter(continent == "Europe") %>%
+  distinct(country) %>%
+  arrange(country) %>%
+  rename("Nombre" = country) %>%
+  kbl(caption = "Países de Europa") %>%
+  kable_classic(full_width = F)
+```
+
+# Punto 4
+
+```{r}
+gapminder[gapminder$year == gapminder$year[(nrow(gapminder) - 4):nrow(gapminder)], ] %>%
+  select(continent, pop, year) %>%
+  group_by(continent, year) %>%
+  # filter(row_number() >= nrow(gapminder)-5) %>%
+  summarise("Población total" = sum(pop)) %>%
+  rename("Continente" = continent, "Año" = year) %>%
+  kbl(caption = "Población total por continentes para los últimos 5 años disponibles") %>%
+  kable_classic(full_width = F)
+```
+
+# Punto 5
+
+```{r}
+gapminder %>%
+  filter(continent == "Americas", year == 2002) %>%
+  select(country) %>%
+  pull() -> America
+
+country_codes %>%
+  filter(country %in% America) %>%
+  rename("Nombre del país" = country, "Código alpha" = iso_alpha, "Código num" = iso_num) %>%
+  kbl(caption = "Países de América") %>%
+  kable_classic(full_width = F)
+```
+
+# Punto 6
+
+```{r}
+gapminder %>%
+  filter(continent == "Oceania") %>%
+  ggplot(mapping = aes(x = year, y = lifeExp, group = country, color = country)) +
+  geom_line() +
+  labs(
+    title = "Evolución de la esperanza de vida de los países de Oceanía",
+    x = "Año",
+    y = "Esperanza de vida",
+    colour = "Países"
+  )
+```
+
