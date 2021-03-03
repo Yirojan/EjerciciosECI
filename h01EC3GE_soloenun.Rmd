@@ -9,7 +9,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-set.seed(426846236)
+set.seed(1)
+library(tidyverse)
 ```
 
 1.  Crear un vector donde se repitan los códigos provinciales de Andalucía: 10 veces Almería, 10 veces Cádiz, ..., 10 veces Jaén, 15 para Málaga y 18 Sevilla. Permutar aleatoriamente los elementos de dicho vector y calcular la tabla de frecuencias.
@@ -18,8 +19,8 @@ set.seed(426846236)
 codigos <- c(4, 11, 14, 18, 21, 23, 29, 41)
 
 repeticiones <- rep(codigos, c(rep(10, 6), 15, 18))
-aleatorio <- repeticiones[sample(1:93)]
-table(factor(aleatorio, 
+aleatorio <- repeticiones[sample(1:length(repeticiones))]
+table(factor(aleatorio, #REVISAR EL ORDEN DE LAS PROVINCIAS
              labels = c("Almería", "Cádiz", "Huelva", "Córdoba", "Granada", "Jaen", "Málaga", "Sevilla")))
 
 # acceder a elementos:
@@ -42,21 +43,47 @@ paste0(rep("Caso_", 30), seq_len(30))
 ```{r}
 set.seed(1357) # semilla del generador
 
-x <- sample(seq_len(999), 250)
-y <- sample(seq_len(999), 250)
+x <- sample(seq_len(999), 250, replace = T)
+y <- sample(seq_len(999), 250, replace = T)
 
 vectores <- cbind(x, y) # i
-diferencia1 <- numeric(length(x) - 1) # ii
-diferencia2 <- numeric(length(x) - 1) # iii
+
+#Otra forma:
+#xy = tibble::tibble(x = x, y = y)
+  
+head(vectores)
+diferencia1 <- diferencia2 <- numeric(length(x) - 1) # ii y iii
 for (i in seq_len(length(x) - 1)) {
   diferencia1[i] <- y[i + 1] - x[i]
   diferencia2[i] <- y[i + 1] - y[i]
 }
 
+#Otra forma:
+#y[-1]-x[-250]
+##y[-1]-y[-250]
+
 suma1 <- numeric(length(x) - 2) # iv
 for (i in seq_len(length(x) - 2)) {
   suma1[i] <- x[i] + 2 * x[i + 1] - x[i + 2]
 }
+
+#Otra forma:
+#x[-249:-250]+2*x[c(-1,-250)]-x[-1:-2]
+
+#O tambien
+#xy %>% 
+# mutate(t1 = lead(y,n=1),
+# t2 = y,
+# V3 = t1-t2) %>% 
+# pull(v3)
+# 
+#EJEMPLO DE USO DE TIBBLE
+# tt1 %>%
+#   mutate(
+#   v1 = lead (x, n=2),
+#   v2 = lag(x, n=3),
+#   v3 = lead(c(rep(NA,3),x[1:7], n = 3))
+#   )
 
 sum(1 / (x + y)) # v
 ```
