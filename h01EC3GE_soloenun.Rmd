@@ -20,8 +20,9 @@ codigos <- c(4, 11, 14, 18, 21, 23, 29, 41)
 
 repeticiones <- rep(codigos, c(rep(10, 6), 15, 18))
 aleatorio <- repeticiones[sample(1:length(repeticiones))]
-table(factor(aleatorio, #REVISAR EL ORDEN DE LAS PROVINCIAS
-             labels = c("Almería", "Cádiz", "Huelva", "Córdoba", "Granada", "Jaen", "Málaga", "Sevilla")))
+table(factor(aleatorio, # REVISAR EL ORDEN DE LAS PROVINCIAS
+  labels = c("Almería", "Cádiz", "Huelva", "Córdoba", "Granada", "Jaen", "Málaga", "Sevilla")
+))
 
 # acceder a elementos:
 ```
@@ -48,9 +49,9 @@ y <- sample(seq_len(999), 250, replace = T)
 
 vectores <- cbind(x, y) # i
 
-#Otra forma:
-#xy = tibble::tibble(x = x, y = y)
-  
+# Otra forma:
+# xy = tibble::tibble(x = x, y = y)
+
 head(vectores)
 diferencia1 <- diferencia2 <- numeric(length(x) - 1) # ii y iii
 for (i in seq_len(length(x) - 1)) {
@@ -58,26 +59,26 @@ for (i in seq_len(length(x) - 1)) {
   diferencia2[i] <- y[i + 1] - y[i]
 }
 
-#Otra forma:
-#y[-1]-x[-250]
-##y[-1]-y[-250]
+# Otra forma:
+# y[-1]-x[-250]
+## y[-1]-y[-250]
 
 suma1 <- numeric(length(x) - 2) # iv
 for (i in seq_len(length(x) - 2)) {
   suma1[i] <- x[i] + 2 * x[i + 1] - x[i + 2]
 }
 
-#Otra forma:
-#x[-249:-250]+2*x[c(-1,-250)]-x[-1:-2]
+# Otra forma:
+# x[-249:-250]+2*x[c(-1,-250)]-x[-1:-2]
 
-#O tambien
-#xy %>% 
+# O tambien
+# xy %>%
 # mutate(t1 = lead(y,n=1),
 # t2 = y,
-# V3 = t1-t2) %>% 
+# V3 = t1-t2) %>%
 # pull(v3)
-# 
-#EJEMPLO DE USO DE TIBBLE
+#
+# EJEMPLO DE USO DE TIBBLE
 # tt1 %>%
 #   mutate(
 #   v1 = lead (x, n=2),
@@ -100,14 +101,13 @@ sum(1 / (x + y)) # v
     viii) Ordenar los elementos de x según la ordenación creciente de y.
 
 ```{r}
-which(y>600) #i
-y[y>600] #i
+which(y > 600) # i
+y[y > 600] # i
 
-diferenciaabsoluto = numeric(length(x))
+diferenciaabsoluto <- numeric(length(x))
 for (i in seq_len(length(x))) {
-  diferenciaabsoluto[i] <- sqrt(abs(x[i]-mean(x)))
+  diferenciaabsoluto[i] <- sqrt(abs(x[i] - mean(x)))
 }
-
 ```
 
 5.  Calcular $1+ (1+2) + ...+ (1+2+3..+10)$.
@@ -119,27 +119,26 @@ sum(cumsum(seq_len(10)))
 6.  Calcular $1+ (2/3) + (2/3)(4/5)+...+(2/3)(4/5)(6/7)+...+ ( (2/3)(4/5)(6/7)...(38/39) )$.
 
 ```{r}
-fracciones = seq(2,38)[seq(1, 38, by = 2)]/seq(3,39)[seq(1, 38, by = 2)]
-sum(1,cumprod(fracciones))
+fracciones <- seq(2, 38)[seq(1, 38, by = 2)] / seq(3, 39)[seq(1, 38, by = 2)]
+sum(1, cumprod(fracciones))
 ```
 
 7.  Construir una matriz n x n con 0 en la diagonal, +1 en la mitad triangular superior y -1 en la mitad triangular inferior.
 
 ```{r}
-n = 5
-matriz = matrix( nrow = n, ncol = n)
+n <- 5
+matriz <- matrix(nrow = n, ncol = n)
 for (i in seq_len(n)) {
   for (j in seq_len(n)) {
-    if (i>j) {
-      matriz[i,j] = -1
-    } else if (i==j){
-      matriz[i,j] = 0
+    if (i > j) {
+      matriz[i, j] <- -1
+    } else if (i == j) {
+      matriz[i, j] <- 0
     }
     else {
-       matriz[i,j] = 1
+      matriz[i, j] <- 1
     }
   }
-  
 }
 matriz
 ```
@@ -147,8 +146,8 @@ matriz
 8.  Construir una matriz con la tabla de multiplicar.
 
 ```{r}
-factorproducto = 2
-tablamultiplicar = matrix(c(rep(factorproducto, 10),seq_len(10), rep(factorproducto, 10)*seq_len(10)), ncol = 3, byrow = F)
+factorproducto <- 2
+tablamultiplicar <- matrix(c(rep(factorproducto, 10), seq_len(10), rep(factorproducto, 10) * seq_len(10)), ncol = 3, byrow = F)
 tablamultiplicar
 ```
 
@@ -161,7 +160,5 @@ tablamultiplicar
 ```{r}
 set.seed(12345)
 
-matrizaleatorios = matrix(ceiling(runif(6*9,0,10)), nrow = 6)
-
-
+matrizaleatorios <- matrix(ceiling(runif(6 * 9, 0, 10)), nrow = 6)
 ```
